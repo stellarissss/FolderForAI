@@ -1,4 +1,6 @@
+#这是本项目的核心前端代码
 import os
+
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
