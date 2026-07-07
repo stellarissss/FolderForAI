@@ -18,7 +18,8 @@ class Folder2AIApp:
         
         self.folder_path = tk.StringVar()
         self.save_path = tk.StringVar()
-        
+        self.clean_data_var = tk.BooleanVar(value=True)
+
         self.create_widgets()
         
     def create_widgets(self):
@@ -41,7 +42,17 @@ class Folder2AIApp:
         
         # 默认保存名称
         self.save_path.set(os.path.join(os.path.expanduser("~"), "Desktop", "项目结构化输出.txt"))
-        
+
+        # 数据清洗选项
+        frame_clean = tk.Frame(self.root)
+        frame_clean.pack(fill="x", padx=20, pady=10)
+        tk.Checkbutton(
+            frame_clean,
+            text="启用数据清洗（自动识别乱码并替换为[无法识别]）",
+            variable=self.clean_data_var,
+            font=("微软雅黑", 10)
+        ).pack(side="left")
+
         # 生成按钮
         self.btn_generate = tk.Button(
             self.root, text="🚀 一键生成", font=("微软雅黑", 12, "bold"), 
@@ -95,7 +106,7 @@ class Folder2AIApp:
         
     def run_task(self, src, dst):
         try:
-            result = core.generate_output(src)
+            result = core.generate_output(src, clean_data=self.clean_data_var.get())
             with open(dst, "w", encoding="utf-8") as f:
                 f.write(result)
             self.log("✅ 生成完成！")
